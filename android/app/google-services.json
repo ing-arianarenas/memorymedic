@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "244607566774",
+    "project_id": "memorymedic-560c4",
+    "storage_bucket": "memorymedic-560c4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244607566774:android:a2a335190922827ce33717",
+        "android_client_info": {
+          "package_name": "com.example.memorymedic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244607566774-ucb8bdug00611omld6p0ne206jglnirm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.memorymedic",
+            "certificate_hash": "e53db475f19ef88e117a02dbfafa25a574162dfd"
+          }
+        },
+        {
+          "client_id": "244607566774-rj3vld2797vm87rljsuvekh3gepto4ha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCRXb18GVZW4ESwyRZmRo7Ram9ha70zW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "244607566774-rj3vld2797vm87rljsuvekh3gepto4ha.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "244607566774-2lr82ibp2ii0nt3s9sn46afdiajelugs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.memorymedic"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

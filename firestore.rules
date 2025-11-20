@@ -1,0 +1,102 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================================================
+    // COLECCIÓN: users
+    // ============================================================================
+    match /users/{userId} {
+      // Leer: Cualquier usuario autenticado puede leer perfiles de usuarios
+      // (necesario para búsqueda por linkCode, email y vinculación)
+      // Permite búsqueda por linkCode y email para vinculación
+      allow read: if request.auth != null;
+
+      // Escribir: Solo el propio usuario puede modificar su perfil
+      // O el paciente puede actualizar su lista de cuidadores
+      // O el cuidador puede actualizar su patientId durante la vinculación
+      allow write: if request.auth != null && (
+        request.auth.uid == userId ||
+        // Permitir que el paciente actualice su lista de cuidadores
+        (resource.data.role == 'patient' && 
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['caregiverIds', 'updatedAt'])) ||
+        // Permitir que el cuidador actualice su patientId durante vinculación
+        (request.resource.data.role == 'caregiver' &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['patientId', 'updatedAt']))
+      );
+    }
+
+    // ============================================================================
+    // COLECCIÓN: medications
+    // ============================================================================
+    match /medications/{medicationId} {
+      // Leer: El dueño del medicamento
+      // Los cuidadores deben leer desde la app usando queries filtradas
+      allow read: if request.auth != null &&
+                     request.auth.uid == resource.data.userId;
+
+      // Crear: Solo usuarios autenticados pueden crear sus propios medicamentos
+      allow create: if request.auth != null &&
+                       request.auth.uid == request.resource.data.userId;
+
+      // Actualizar/Eliminar: Solo el dueño del medicamento
+      allow update, delete: if request.auth != null &&
+                               request.auth.uid == resource.data.userId;
+    }
+
+    // ============================================================================
+    // COLECCIÓN: medication_logs
+    // ============================================================================
+    match /medication_logs/{logId} {
+      // Leer: El dueño del log
+      // Los cuidadores deben leer desde la app usando queries filtradas
+      allow read: if request.auth != null &&
+                     request.auth.uid == resource.data.userId;
+
+      // Crear: Solo el dueño del log
+      allow create: if request.auth != null &&
+                       request.auth.uid == request.resource.data.userId;
+
+      // Actualizar/Eliminar: Solo el dueño del log
+      allow update, delete: if request.auth != null &&
+                               request.auth.uid == resource.data.userId;
+    }
+
+    // ============================================================================
+    // COLECCIÓN: caregiver_medications (NUEVA - Para cuidadores)
+    // ============================================================================
+    match /caregiver_medications/{docId} {
+      // Leer: Solo el cuidador asignado
+      allow read: if request.auth != null &&
+                     request.auth.uid == resource.data.caregiverId;
+
+      // Crear/Actualizar: Solo el paciente puede crear/actualizar
+      allow create, update: if request.auth != null;
+
+      // Eliminar: El cuidador o el paciente
+      allow delete: if request.auth != null && (
+        request.auth.uid == resource.data.caregiverId ||
+        request.auth.uid == resource.data.patientId
+      );
+    }
+
+    // ============================================================================
+    // COLECCIÓN: caregiver_logs (NUEVA - Para cuidadores)
+    // ============================================================================
+    match /caregiver_logs/{docId} {
+      // Leer: Solo el cuidador asignado
+      allow read: if request.auth != null &&
+                     request.auth.uid == resource.data.caregiverId;
+
+      // Crear/Actualizar: Solo el paciente puede crear/actualizar
+      allow create, update: if request.auth != null;
+
+      // Eliminar: El cuidador o el paciente
+      allow delete: if request.auth != null && (
+        request.auth.uid == resource.data.caregiverId ||
+        request.auth.uid == resource.data.patientId
+      );
+    }
+  }
+}
+
