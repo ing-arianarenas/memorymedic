@@ -1,5 +1,6 @@
 /// Pantalla de Registro para MemoryMedic
 /// Permite crear una cuenta con email y contraseña
+library;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

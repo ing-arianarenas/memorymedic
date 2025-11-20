@@ -1,5 +1,6 @@
 /// Modelo de Usuario para MemoryMedic
 /// Representa un usuario autenticado con su rol (Paciente o Cuidador)
+library;
 
 enum UserRole {
   patient, // Paciente - persona que toma medicamentos

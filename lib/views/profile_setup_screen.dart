@@ -1,6 +1,7 @@
 /// Pantalla de Configuración de Perfil para MemoryMedic
 /// Primera pantalla después del registro/login
 /// Recopila información personal: nombre, apellido y fecha de nacimiento
+library;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

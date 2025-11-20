@@ -1,5 +1,6 @@
 /// Pantalla de Selección de Rol para MemoryMedic
 /// Permite al usuario elegir si es Paciente o Cuidador
+library;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

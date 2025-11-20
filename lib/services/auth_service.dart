@@ -1,5 +1,6 @@
 /// Servicio de Autenticación para MemoryMedic
 /// Maneja login, registro, Google Sign-In y gestión de usuarios en Firestore
+library;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';

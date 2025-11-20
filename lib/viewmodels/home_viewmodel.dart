@@ -9,7 +9,7 @@ import '../services/auth_service.dart';
 
 /// ViewModel para la pantalla principal de medicamentos
 class HomeViewModel extends ChangeNotifier {
-  final NotificationService _notificationService = NotificationService();
+  final NotificationService _notificationService = notificationService;
   final StatisticsService _statisticsService = StatisticsService();
   final DatabaseService _databaseService = DatabaseService();
   final AuthService _authService = AuthService();
@@ -419,7 +419,7 @@ class HomeViewModel extends ChangeNotifier {
 
         // Actualizar en Firestore
         final medicationData = medication.toMap();
-        final currentUser = _authService.currentUser;
+        final currentUser = _authСervice.currentUser;
         if (currentUser != null) {
           medicationData['userId'] = currentUser.uid;
         }

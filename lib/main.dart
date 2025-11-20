@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -28,15 +29,60 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Inicializar servicio de notificaciones
-  await NotificationService().initialize();
-  await NotificationService().requestPermissions();
+  await NotificationService.initializeNotifications();
+  await NotificationService.requestPermissions();
 
   runApp(const MemoryMedicApp());
 }
 
 /// Aplicación principal de MemoryMedic
-class MemoryMedicApp extends StatelessWidget {
+class MemoryMedicApp extends StatefulWidget {
   const MemoryMedicApp({super.key});
+
+  @override
+  _MemoryMedicAppState createState() => _MemoryMedicAppState();
+}
+
+class _MemoryMedicAppState extends State<MemoryMedicApp> {
+  @override
+  void initState() {
+    super.initState();
+    AwesomeNotifications().setListeners(
+      onActionReceivedMethod: (ReceivedAction receivedAction) async {
+        if (receivedAction.buttonKeyPressed == 'SNOOZE') {
+          // Re-notify after 5 minutes
+          NotificationService.showMedicationNotification(
+            title: receivedAction.title ?? '',
+            body: receivedAction.body ?? '',
+            imageUrl: receivedAction.bigPicture ?? '',
+            payload: receivedAction.payload ?? {},
+            schedule: NotificationInterval(
+              interval: 300, // 5 minutes
+              timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier(),
+              repeats: false,
+            ),
+          );
+        } else if (receivedAction.buttonKeyPressed == 'DISMISS') {
+          // Cancel all scheduled notifications
+          AwesomeNotifications().cancelAllSchedules();
+        }
+      },
+      onNotificationExpiredMethod: (ReceivedNotification receivedNotification) async {
+        // Re-notify after 1 minute if the notification times out
+        NotificationService.showMedicationNotification(
+          title: receivedNotification.title ?? '',
+          body: receivedNotification.body ?? '',
+          imageUrl: receivedNotification.bigPicture ?? '',
+          payload: receivedNotification.payload ?? {},
+          schedule: NotificationInterval(
+            interval: 60, // 1 minute
+            timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier(),
+            repeats: false,
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 /// Servicio de Base de Datos para MemoryMedic
 /// Maneja todas las operaciones de Firestore (CRUD)
 /// Separado del AuthService para mejor organización
+library;
 
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

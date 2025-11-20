@@ -1,5 +1,6 @@
 /// Pantalla de Login para MemoryMedic
 /// Permite iniciar sesión con email/contraseña o Google
+library;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

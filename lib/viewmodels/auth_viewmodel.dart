@@ -1,8 +1,10 @@
 /// ViewModel de Autenticación para MemoryMedic
 /// Maneja la lógica de negocio de autenticación y estado del usuario
+library;
 
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
 
@@ -10,6 +12,7 @@ enum AuthStatus { initial, authenticated, unauthenticated, loading }
 
 class AuthViewModel extends ChangeNotifier {
   final AuthService _authService = AuthService();
+  final FirebaseFunctions _functions = FirebaseFunctions.instanceFor(region: "us-central1");
 
   AuthStatus _status = AuthStatus.initial;
   UserModel? _currentUser;
@@ -199,6 +202,34 @@ class AuthViewModel extends ChangeNotifier {
       return false;
     }
   }
+
+  // Vincular cuidador a paciente usando Firebase Functions
+  Future<bool> linkCaregiverToPatient(String patientCode) async {
+    _setLoading(true);
+    _clearError();
+
+    try {
+      final callable = _functions.httpsCallable('linkCaregiverToPatient');
+      final result = await callable.call(<String, dynamic>{
+        'patientCode': patientCode,
+      });
+
+      // La función se ejecutó correctamente, ahora refrescamos los datos del usuario
+      await refreshUser();
+      _setLoading(false);
+      return true;
+
+    } on FirebaseFunctionsException catch (e) {
+      _errorMessage = e.message ?? "Ocurrió un error al vincular.";
+      _setLoading(false);
+      return false;
+    } catch (e) {
+      _errorMessage = "Ocurrió un error inesperado: $e";
+      _setLoading(false);
+      return false;
+    }
+  }
+
 
   // Cerrar sesión
   Future<void> signOut() async {

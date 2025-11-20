@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 /// Tipo de acción realizada con el medicamento
 enum MedicationAction {

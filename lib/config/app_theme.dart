@@ -43,11 +43,9 @@ class AppTheme {
       primary: AppColors.primary,
       secondary: AppColors.secondary,
       surface: AppColors.cardLight,
-      background: AppColors.backgroundLight,
       onPrimary: AppColors.secondary,
       onSecondary: Colors.white,
       onSurface: AppColors.textLight,
-      onBackground: AppColors.textLight,
     ),
 
     // Tipografía
@@ -125,11 +123,9 @@ class AppTheme {
       primary: AppColors.primary,
       secondary: AppColors.secondary,
       surface: AppColors.cardDark,
-      background: AppColors.backgroundDark,
       onPrimary: AppColors.secondary,
       onSecondary: Colors.white,
       onSurface: AppColors.textDark,
-      onBackground: AppColors.textDark,
     ),
 
     // Tipografía
